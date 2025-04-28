@@ -3,12 +3,7 @@ package com.revisao.ecommerce.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -23,7 +18,7 @@ public class Usuario {
 	private String senha;
 
 
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
 	private List<Pedido> pedidos = new ArrayList<>();
 
 	public Usuario() {
