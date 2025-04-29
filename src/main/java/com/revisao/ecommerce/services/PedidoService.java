@@ -1,12 +1,12 @@
 package com.revisao.ecommerce.services;
 
 import com.revisao.ecommerce.dto.PedidoDTO;
-import com.revisao.ecommerce.entities.Categoria;
 import com.revisao.ecommerce.entities.Pedido;
 import com.revisao.ecommerce.entities.StatusDoPedido;
 import com.revisao.ecommerce.entities.Usuario;
 import com.revisao.ecommerce.repositories.PedidoRepository;
 import com.revisao.ecommerce.repositories.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,19 +36,16 @@ public class PedidoService {
         return new PedidoDTO(pedido);
     }
 
-    public List<Pedido> getAll(){
-        List<Pedido> pedidos = pedidoRepository.findAll();
-        return pedidos ;
+    public List<PedidoDTO> getAll(){
+        List<Pedido> lista = pedidoRepository.findAll();
+
+        return lista.stream().map(x -> new PedidoDTO(x)).toList() ;
     }
 
-    public  Pedido getById(Long id){
-        Optional<Pedido> pedido = pedidoRepository.findById(id);
-        if(pedido.isPresent()){
-           Pedido getPedido = pedidoRepository.findById(id).get();
-           return getPedido;
-        } else{
-            return null;
-        }
+    public Pedido getById(Long id){
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+
     }
 
     public  PedidoDTO  updtPedido(PedidoDTO dto, Long id){
@@ -56,7 +53,6 @@ public class PedidoService {
         if(pedido.isPresent()){
             Pedido updtPedido = pedido.get();
             if(dto.getStatus() != updtPedido.getStatus()) updtPedido.setStatus(dto.getStatus());
-            if(dto.getMomento() != updtPedido.getMomento()) updtPedido.setMomento(dto.getMomento());
            updtPedido = pedidoRepository.save(updtPedido);
            return new PedidoDTO(updtPedido);
         }

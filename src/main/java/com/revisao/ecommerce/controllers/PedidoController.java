@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping ("order")
@@ -28,13 +29,16 @@ public class PedidoController {
     }
 
     @GetMapping ( value =  "/all")
-    public ResponseEntity<List<Pedido>> getAllPedidos(){
+    public ResponseEntity<List<PedidoDTO>> getAllPedidos(){
         return ResponseEntity.ok(pedidoService.getAll());
     }
 
     @GetMapping ( value = "/get/{id}")
-    public ResponseEntity<Pedido> getProdutoByID(@PathVariable Long id){
-        return ResponseEntity.ok(pedidoService.getById(id));
+    public ResponseEntity<PedidoDTO> getProdutoByID(@PathVariable Long id){
+        Pedido pedido = pedidoService.getById(id);
+        PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+        return  ResponseEntity.ok(pedidoDTO);
+
     }
 
     @PutMapping ( value = "/updt/{id}")

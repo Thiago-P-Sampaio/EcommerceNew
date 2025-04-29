@@ -1,6 +1,7 @@
 package com.revisao.ecommerce.dto;
 
 import java.time.Instant;
+import java.util.Optional;
 
 import com.revisao.ecommerce.entities.Pedido;
 import com.revisao.ecommerce.entities.StatusDoPedido;
@@ -29,6 +30,7 @@ public class PedidoDTO {
         this.status = pedido.getStatus();
         this.clienteId = pedido.getCliente().getId();
     }
+
 
 
     public Long getId() {
