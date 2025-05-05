@@ -1,8 +1,11 @@
 package com.revisao.ecommerce.dto;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import com.revisao.ecommerce.entities.ItemDoPedido;
 import com.revisao.ecommerce.entities.Pedido;
 import com.revisao.ecommerce.entities.StatusDoPedido;
 import com.revisao.ecommerce.entities.Usuario;
@@ -12,6 +15,8 @@ public class PedidoDTO {
     private Instant momento;
     private StatusDoPedido status;
     private  Long clienteId;
+
+    private List<ItemDoPedidoDTO> items = new ArrayList<>();
 
 
     public PedidoDTO(Long id, Instant momento, StatusDoPedido status, Long clienteId) {
@@ -29,7 +34,14 @@ public class PedidoDTO {
         this.momento = pedido.getMomento();
         this.status = pedido.getStatus();
         this.clienteId = pedido.getCliente().getId();
+
+        for(ItemDoPedido item : pedido.getItems()){
+            ItemDoPedidoDTO itemDTO = new ItemDoPedidoDTO(item);
+            items.add(itemDTO);
+        }
     }
+
+
 
 
 
@@ -64,4 +76,13 @@ public class PedidoDTO {
     public void setClienteId(Long clienteId) {
         this.clienteId = clienteId;
     }
+
+    public List<ItemDoPedidoDTO> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemDoPedidoDTO> items) {
+        this.items = items;
+    }
 }
+

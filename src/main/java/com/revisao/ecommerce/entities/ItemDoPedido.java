@@ -14,6 +14,7 @@ public class ItemDoPedido {
 	private Integer quantidade;
 	private Double preco;
 
+
 	public ItemDoPedido() {
 
 	}
