@@ -4,6 +4,8 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "tb_item_pedido")
 public class ItemDoPedido {
@@ -12,7 +14,7 @@ public class ItemDoPedido {
 	private ItemDoPedidoPK id = new ItemDoPedidoPK();
 
 	private Integer quantidade;
-	private Double preco;
+	private double preco;
 
 
 	public ItemDoPedido() {
@@ -58,4 +60,15 @@ public class ItemDoPedido {
 		this.preco = preco;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		ItemDoPedido that = (ItemDoPedido) o;
+		return Objects.equals(id, that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
 }

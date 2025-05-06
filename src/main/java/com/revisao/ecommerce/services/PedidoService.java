@@ -3,13 +3,11 @@ package com.revisao.ecommerce.services;
 import com.revisao.ecommerce.dto.ItemDoPedidoDTO;
 import com.revisao.ecommerce.dto.PedidoDTO;
 import com.revisao.ecommerce.entities.*;
-import com.revisao.ecommerce.repositories.ItemDoPedidoRepository;
-import com.revisao.ecommerce.repositories.PedidoRepository;
-import com.revisao.ecommerce.repositories.ProdutoRepository;
-import com.revisao.ecommerce.repositories.UsuarioRepository;
+import com.revisao.ecommerce.repositories.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -33,6 +31,9 @@ public class PedidoService {
     @Autowired
     ItemDoPedidoRepository itemDoPedidoRepository;
 
+    @Autowired
+    PagamentoRepository pagamentoRepository;
+
     @Transactional
     public PedidoDTO inserir(PedidoDTO dto){
         Pedido pedido = new Pedido();
@@ -47,7 +48,14 @@ public class PedidoService {
             pedido.getItems().add(item);
         }
 
+        Pagamento pagamento = new Pagamento();//
+        pagamento.setMomento(Instant.now());
+        pagamento.setPedido(pedido);
+
+
         pedido = pedidoRepository.save(pedido);
+        itemDoPedidoRepository.saveAll(pedido.getItems()); ///
+        pagamentoRepository.save(pagamento);////////////
         return new PedidoDTO(pedido);
     }
 

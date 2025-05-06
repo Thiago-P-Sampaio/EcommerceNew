@@ -3,6 +3,7 @@ package com.revisao.ecommerce.entities;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.revisao.ecommerce.dto.UsuarioDTO;
@@ -36,6 +37,9 @@ public class Pedido {
 
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemDoPedido> items = new HashSet<>();
+
+
+
 
 	
 	public Pedido() {
@@ -87,5 +91,17 @@ public class Pedido {
 
 	public void setCliente(Usuario cliente) {
 		this.cliente = cliente;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		Pedido pedido = (Pedido) o;
+		return Objects.equals(id, pedido.id) && Objects.equals(momento, pedido.momento) && status == pedido.status && Objects.equals(cliente, pedido.cliente) && Objects.equals(pagamento, pedido.pagamento) && Objects.equals(items, pedido.items);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
 	}
 }
