@@ -1,13 +1,15 @@
 package com.revisao.ecommerce.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "tb_usuario")
-public class Usuario {
+public class Usuario  implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +22,13 @@ public class Usuario {
 
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(name = "tb_usuario_role",
+			joinColumns = @JoinColumn(name = "usuario_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
 
 	public Usuario() {
 
@@ -79,5 +88,41 @@ public class Usuario {
 
 	public void setPedidos(List<Pedido> pedidos) {
 		this.pedidos = pedidos;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void addRole(Role role){
+		roles.add(role);
+	}
+
+	public boolean hasRole(String roleName){
+		for(Role role : roles) {
+			if(role.getAuthority().equals(roleName)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
+
+	@Override
+	public String getPassword() {
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}
 }
